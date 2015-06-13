@@ -6,6 +6,8 @@ require 'sinatra/reloader'
 require 'sinatra/activerecord'
 require 'sinatra/param'
 
+require_relative 'models/init'
+
 require 'pusher'
 
 Time.zone = "Tokyo"
@@ -49,8 +51,14 @@ module CafeSeat
       param :price, Integer, required: true
       param :keyword, String, required: true
 
-      pusher('test_channel').trigger('my_event', {
-                                       message: 'hello world'
+      # p Place.where(keyword: params[:keyword])
+      # p place = Place.where(keyword: params[:keyword]).first
+
+      uuid = 'test_channel' # place.uuid
+
+      # [NOTE] チャンネル=お店
+      pusher(uuid).trigger('my_event', {
+                                       message: "#{params[:price]}円で席欲しい人がいるです"
                                      })
     end
   end

@@ -40,9 +40,19 @@ describe 'API' do
       let(:target){ 'keyword' }
     end
 
-    it 'pusherが1回呼ばれる' do
-      expect(pusher_client).to receive(:trigger).once
-      get uri+'?'+params.to_query
+
+    context 'Placeが無い' do
+    end
+
+    context 'Placeがある' do
+
+      xit 'channel = uuid' do
+      end
+
+      it 'pusherが1回呼ばれる' do
+        expect(pusher_client).to receive(:trigger).once
+        get uri+'?'+params.to_query
+      end
     end
   end
 

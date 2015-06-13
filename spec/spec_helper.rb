@@ -24,3 +24,17 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+shared_examples_for '必須パラメータ' do |name|
+
+  it "#{name}" do
+    params.delete(target.intern)
+
+    if method == 'get'
+      get uri+'?'+params.to_query
+    elsif method == 'post'
+      post uri, params
+    end
+    expect(json['errors'][target]).to eq('Parameter is required')
+  end
+end

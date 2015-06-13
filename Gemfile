@@ -10,6 +10,8 @@ gem 'pg'
 gem 'sinatra-param'
 gem 'rake'
 
+gem 'pusher'
+
 group :development, :test do
   gem 'rack-test', require: 'rack/test'
   gem 'rspec'

@@ -2,8 +2,13 @@
 
 require 'sinatra/base'
 require 'sinatra/json'
-require "sinatra/reloader"
+require 'sinatra/reloader'
 require 'sinatra/activerecord'
+require 'sinatra/param'
+
+require_relative 'models/init'
+
+require 'pusher'
 
 Time.zone = "Tokyo"
 ActiveRecord::Base.default_timezone = :local
@@ -13,6 +18,7 @@ ActiveRecord::Base.establish_connection(:ENV['RACK_ENV'])
 
 module CafeSeat
   class Server < Sinatra::Base
+    helpers Sinatra::Param
     set :environments, %w{development test production}
 
     configure do
@@ -25,6 +31,11 @@ module CafeSeat
       def h(text)
         Rack::Utils.escape_html(text)
       end
+
+      def pusher(channel)
+        Pusher.url = "http://e0c0b870bbeeb89ccfcb:439af28f5229fe0d362e@api.pusherapp.com/apps/124786"
+        Pusher[channel]
+      end
     end
 
     before do
@@ -34,6 +45,21 @@ module CafeSeat
 
     get '/?' do
       json({ message: 'hello :)' })
+    end
+
+    get '/order/?' do
+      param :price, Integer, required: true
+      param :keyword, String, required: true
+
+      # p Place.where(keyword: params[:keyword])
+      # p place = Place.where(keyword: params[:keyword]).first
+
+      uuid = 'test_channel' # place.uuid
+
+      # [NOTE] チャンネル=お店
+      pusher(uuid).trigger('my_event', {
+                                       message: "#{params[:price]}円で席欲しい人がいるです"
+                                     })
     end
   end
 end

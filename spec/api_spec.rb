@@ -45,9 +45,9 @@ describe 'API' do
   end
 
   describe '依頼' do
-    let(:method){'get'}
+    let(:method){'post'}
     let(:uri) { "/order/" }
-    let(:params) {{ price: 0, keyword: ''}}
+    let(:params) {{ price: 0, keyword: '', device: ''}}
     let(:pusher_client){ double('Pusher client') }
 
     before do
@@ -62,6 +62,10 @@ describe 'API' do
       let(:target){ 'keyword' }
     end
 
+    it_behaves_like '必須パラメータ', 'device' do
+      let(:target){ 'device' }
+    end
+
     context 'Placeがある' do
 
       xit 'channel = uuid' do
@@ -69,9 +73,24 @@ describe 'API' do
 
       it 'pusherが1回呼ばれる' do
         expect(pusher_client).to receive(:trigger).once
-        get uri+'?'+params.to_query
+        post uri,params
       end
     end
+  end
+
+  describe '了解' do
+    let(:method){'get'}
+    let(:uri) { "/accept/" }
+    let(:params) {{ device: 0 }}
+    let(:pusher_client){ double('Pusher client') }
+
+    it_behaves_like '必須パラメータ', 'uuid' do
+      let(:target){ 'uuid' }
+    end
+    it_behaves_like '必須パラメータ', 'デバイスID' do
+      let(:target){ 'device' }
+    end
+
   end
 
 end

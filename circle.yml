@@ -22,7 +22,7 @@ test:
 
 deployment:
   cd:
-    branch: master
+    branch: add-init-project-with-circle-yml
     heroku:
       appname: cafe-seat
 

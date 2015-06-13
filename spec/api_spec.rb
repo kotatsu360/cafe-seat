@@ -2,12 +2,12 @@
 require 'spec_helper'
 
 describe 'API' do
-  let(:method){'get'}
   let(:json) { JSON.parse(last_response.body) }
   let(:http_status) { last_response.status }
 
   describe '疎通確認' do
     let(:uri) { '/' }
+    let(:method){'get'}
     let(:params) {{}}
 
     before do
@@ -23,7 +23,29 @@ describe 'API' do
     end
   end
 
+  describe '登録' do
+    let(:method){'post'}
+    let(:uri) { "/regist/" }
+    let(:params) {{ uuid: 0, device: ''}}
+
+    it_behaves_like '必須パラメータ', 'uuid' do
+      let(:target){ 'uuid' }
+    end
+    it_behaves_like '必須パラメータ', 'デバイスID' do
+      let(:target){ 'device' }
+    end
+
+    it 'DBに保存される' do
+      before = CurrentLocation.count
+      post uri, params
+      after = CurrentLocation.count
+
+      expect(after-before).to eq(1)
+    end
+  end
+
   describe '依頼' do
+    let(:method){'get'}
     let(:uri) { "/order/" }
     let(:params) {{ price: 0, keyword: ''}}
     let(:pusher_client){ double('Pusher client') }
@@ -38,10 +60,6 @@ describe 'API' do
     end
     it_behaves_like '必須パラメータ', '検索キーワード' do
       let(:target){ 'keyword' }
-    end
-
-
-    context 'Placeが無い' do
     end
 
     context 'Placeがある' do

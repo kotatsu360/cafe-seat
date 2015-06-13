@@ -47,6 +47,18 @@ module CafeSeat
       json({ message: 'hello :)' })
     end
 
+    post '/regist/?' do
+      param :uuid, String, required: true
+      param :device, String, required: true
+
+      CurrentLocation.create(uuid: params[:uuid],
+                             device: params[:device])
+
+      # Place.find_by(uuid: params[:uuid])
+      # json({place: Place.name})
+      json({})
+    end
+
     get '/order/?' do
       param :price, Integer, required: true
       param :keyword, String, required: true

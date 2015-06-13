@@ -22,6 +22,6 @@ test:
 
 deployment:
   cd:
-    branch: master
+    branch: envionment-test
     heroku:
       appname: cafe-seat

@@ -22,6 +22,6 @@ test:
 
 deployment:
   cd:
-    branch: master
+    branch: change-sinatra
     heroku:
       appname: cafe-seat

@@ -49,7 +49,7 @@ module CafeSeat
 
     post '/regist/?' do
       param :uuid, String, required: true
-      param :device, String, required: true
+      param :device, String, required: true # 売る側
 
       CurrentLocation.create(uuid: params[:uuid],
                              device: params[:device])
@@ -59,19 +59,37 @@ module CafeSeat
       json({})
     end
 
-    get '/order/?' do
+    post '/order/?' do
       param :price, Integer, required: true
       param :keyword, String, required: true
+      param :device, String, required: true # 買う側
 
-      # p Place.where(keyword: params[:keyword])
-      # p place = Place.where(keyword: params[:keyword]).first
+      # [NOTE]とりあえず適当に
+      location = CurrentLocation.first;
+      unless location.nil?
+        Order.create(uuid: location.uuid,
+                     price: params[:price],
+                     device: params[:device], # 買う側
+                     )
+        # [NOTE] チャンネル=お店
+        pusher(location.uuid).trigger('order', {
+                                        message: "#{params[:price]}円で席欲しい人がいるです"
+                                      })
+      end
+      json({room: params[:device]})      # 返答が返ってくる部屋
+    end
 
-      uuid = 'test_channel' # place.uuid
+    get '/accept/?' do
+      param :device, String, required: true # 売る側
+      param :uuid, String, required: true
 
-      # [NOTE] チャンネル=お店
-      pusher(uuid).trigger('my_event', {
-                                       message: "#{params[:price]}円で席欲しい人がいるです"
-                                     })
+      order = Order.find_by(uuid: location.uuid);
+
+      pusher(order.device).trigger('order', {
+                                      message: "オッケーだってさ"
+                                    })
+
+      json({})
     end
   end
 end

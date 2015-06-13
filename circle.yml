@@ -23,7 +23,5 @@ test:
 deployment:
   cd:
     branch: master
-    commands:
-      - echo ${RAILS_SECRET_KEY}
     heroku:
       appname: cafe-seat

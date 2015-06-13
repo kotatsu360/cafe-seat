@@ -5,6 +5,7 @@ require 'sinatra/json'
 require 'sinatra/reloader'
 require 'sinatra/activerecord'
 require 'sinatra/param'
+require 'sinatra/cross_origin'
 
 require_relative 'models/init'
 
@@ -23,6 +24,8 @@ module CafeSeat
 
     configure do
       register Sinatra::Reloader
+      register Sinatra::CrossOrigin
+      enable :cross_origin
     end
 
     use ActiveRecord::ConnectionAdapters::ConnectionManagement

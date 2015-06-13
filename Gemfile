@@ -9,6 +9,7 @@ gem 'sinatra-activerecord'
 gem 'pg'
 gem 'sinatra-param'
 gem 'rake'
+gem 'sinatra-cross_origin'
 
 gem 'pusher'
 

@@ -8,14 +8,14 @@ gem 'activerecord'
 gem 'sinatra-activerecord'
 gem 'pg'
 gem 'sinatra-param'
-gem 'rake'
 gem 'sinatra-cross_origin'
 
 gem 'pusher'
+gem 'rspec'
+gem 'rake'
 
 group :development, :test do
   gem 'rack-test', require: 'rack/test'
-  gem 'rspec'
   gem 'sqlite3'
 end
 

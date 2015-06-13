@@ -54,8 +54,8 @@ module CafeSeat
       param :uuid, String, required: true
       param :device, String, required: true # 売る側
 
-      # CurrentLocation.create(uuid: params[:uuid],
-      #                        device: params[:device])
+      CurrentLocation.create(uuid: params[:uuid],
+                             device: params[:device])
 
       # Place.find_by(uuid: params[:uuid])
       # json({place: Place.name})

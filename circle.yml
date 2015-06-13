@@ -23,14 +23,7 @@ test:
 deployment:
   cd:
     branch: master
+    commands:
+      - echo ${RAILS_SECRET_KEY}
     heroku:
       appname: cafe-seat
-
-# deployment:
-#   cd:
-#     branch: master
-#     commands:
-#       - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
-#       - git push git@heroku.com:foo-bar-123.git $CIRCLE_SHA1:refs/heads/master
-#       - heroku run rake db:migrate --app foo-bar-123:
-#           timeout: 400 # if your deploys take a long time

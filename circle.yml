@@ -1,0 +1,36 @@
+## Customize the test machine
+machine:
+  pre:
+    - sudo sed -i 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/g' /etc/ssh/ssh_config
+    - cat /etc/ssh/ssh_config | grep GSSAPIAuthentication
+  timezone:
+      Asia/Tokyo # Set the timezone
+
+  # Version of ruby to use
+  ruby:
+    version:
+      2.1.3
+
+  # Override /etc/hosts
+  hosts:
+    circlehost: 127.0.0.1
+
+## Customize test commands
+test:
+  override:
+    - bundle exec rake spec
+
+deployment:
+  cd:
+    branch: master
+    heroku:
+      appname: cafe-seat
+
+# deployment:
+#   cd:
+#     branch: master
+#     commands:
+#       - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
+#       - git push git@heroku.com:foo-bar-123.git $CIRCLE_SHA1:refs/heads/master
+#       - heroku run rake db:migrate --app foo-bar-123:
+#           timeout: 400 # if your deploys take a long time

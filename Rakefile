@@ -1,6 +1,12 @@
-# Add your own tasks in files placed in lib/tasks ending in .rake,
-# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
+require 'sinatra/activerecord'
+require 'sinatra/activerecord/rake'
 
-require File.expand_path('../config/application', __FILE__)
+require 'rspec/core/rake_task'
 
-Rails.application.load_tasks
+desc "run spec"
+task :default => [:spec]
+
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = 'spec/**/*_spec.rb'
+  spec.rspec_opts = %w(--color --format progress)
+end
